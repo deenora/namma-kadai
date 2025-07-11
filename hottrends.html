@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deenora - Hot Trends</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">DEENORA</div>
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html">Products</a>
+      <a href="hottrends.html" class="active">Hot Trends</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html" class="cart-icon">🛒 Cart <span id="cart-count">0</span></a>
+    </nav>
+  </header>
+
+  <section class="products">
+    <h2>🔥 Hot Trends</h2>
+    <div class="product-grid" id="hot-product-grid"></div>
+  </section>
+
+  <!-- Popup Modal -->
+  <div class="popup-overlay" id="popup-overlay">
+    <div class="popup-card">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <img id="popup-img" src="" alt="Popup Image" />
+      <h3 id="popup-title"></h3>
+      <p id="popup-price"></p>
+
+      <div class="quantity-control">
+        <button onclick="decreaseQty()">-</button>
+        <input type="number" id="popup-qty" value="1" min="1">
+        <button onclick="increaseQty()">+</button>
+      </div>
+
+      <div class="popup-buttons">
+        <button class="fancy-cart-btn" onclick="sendPopupToInstagram()">
+          <span>Send to Instagram</span>
+        </button>
+        <button class="fancy-cart-btn secondary" onclick="addPopupToCart()">
+          <span>Add to Cart</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const hotProductData = [
+      { name: 'BMW Premium Oversized', price: 499, img: 'images/bmw top.jpg' },
+      { name: 'Ronaldo Regular Fit', price: 349, img: 'images/cr7 limited.jpg' },
+      { name: 'Mercedes Oversized', price: 399, img: 'images/benz.jpg' },
+      { name: 'Fatality Regular fit', price: 349, img: 'images/fatality skull.jpg' },
+      { name: 'Fighter', price: 489, img: 'images/fighter.jpg' },
+      { name: 'Humble Floral Oversized', price: 399, img: 'images/humble.jpg' },
+      { name: 'Silvia Regular fit', price: 349, img: 'images/silvia.jpg' },
+      { name: 'NSX Oversized', price: 489, img: 'images/nsx d.jpg' },
+      { name: 'Floral Print Oversized', price: 399, img: 'images/peak flr.jpg' },
+      { name: 'Typography Oversized', price: 399, img: 'images/attitude.jpg' },
+      { name: 'Cristiano Regular fit', price: 3199, img: 'images/cristiano.jpg' },
+      { name: 'Akatsuki logo Regular fit', price: 349, img: 'images/grey akatsuki.jpg' },
+      { name: 'Warrior Mentality Oversized', price: 399, img: 'images/me vs me.jpg' },
+      { name: 'Silvia Black Regualr fit', price: 349, img: 'images/bl sil.jpg' },
+      { name: 'chill guy Regualr fit', price: 349, img: 'images/chill.jpg' },
+      { name: 'Itachi Regualr fit', price: 349, img: 'images/itachi eye.jpg' }
+    ];
+
+    function openPopupWithData(imgPath, title, price) {
+      document.getElementById("popup-img").src = imgPath;
+      document.getElementById("popup-title").innerText = title;
+      document.getElementById("popup-price").innerText = `₹${price}`;
+      document.getElementById("popup-qty").value = 1;
+      document.getElementById("popup-overlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popup-overlay").style.display = "none";
+    }
+
+    function decreaseQty() {
+      const input = document.getElementById("popup-qty");
+      if (parseInt(input.value) > 1) input.value--;
+    }
+
+    function increaseQty() {
+      const input = document.getElementById("popup-qty");
+      input.value++;
+    }
+
+    function sendPopupToInstagram() {
+      const name = document.getElementById("popup-title").innerText;
+      const price = parseFloat(document.getElementById("popup-price").innerText.replace(/[₹₹]/g, ""));
+      const qty = parseInt(document.getElementById("popup-qty").value);
+      addToCartInstagram(name, price, qty);
+    }
+
+    function addPopupToCart() {
+      const name = document.getElementById("popup-title").innerText;
+      const price = parseFloat(document.getElementById("popup-price").innerText.replace(/[₹₹]/g, ""));
+      const qty = parseInt(document.getElementById("popup-qty").value);
+      const img = document.getElementById("popup-img").src;
+
+      let cart = JSON.parse(localStorage.getItem("deenoraCart")) || [];
+
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ name, price, qty, img });
+      }
+
+      localStorage.setItem("deenoraCart", JSON.stringify(cart));
+      updateCartCount();
+      alert(`${qty} x ${name} added to cart!`);
+      closePopup();
+    }
+
+    function updateCartCount() {
+      const countEl = document.getElementById('cart-count');
+      let cart = JSON.parse(localStorage.getItem('deenoraCart')) || [];
+      let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      countEl.textContent = totalQty;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById('hot-product-grid');
+      hotProductData.forEach(p => {
+        const box = document.createElement('div');
+        box.className = 'glow-box';
+        box.innerHTML = `
+          <img src="${p.img}" alt="${p.name}" onclick="openPopupWithData('${p.img}', '${p.name}', ${p.price})" />
+          <h3>${p.name} - ₹${p.price}</h3>
+          <button class="fancy-cart-btn" onclick="openPopupWithData('${p.img}', '${p.name}', ${p.price})"><span>Add to Cart</span></button>
+        `;
+        container.appendChild(box);
+      });
+
+      updateCartCount();
+    });
+  </script>
+
+  <footer class="footer">
+    <p>&copy; 2025 Deenora. All Rights Reserved.</p>
+  </footer>
+  <script src="int.js"></script>
+</body>
+</html>

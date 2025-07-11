@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deenora - Cart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Fix for total text color */
+    .total-text {
+      color: #000;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 2rem 0 1rem;
+    }
+
+    /* Optional: center and style the message box and buttons */
+    .copy-cart-box {
+      text-align: center;
+      margin: 2rem auto;
+      max-width: 500px;
+    }
+
+    .copy-cart-box textarea {
+      width: 100%;
+      height: 100px;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      resize: none;
+    }
+
+    .copy-btn {
+      background: linear-gradient(to right, #000, #c00);
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 1rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .fancy-cart-btn {
+      display: block;
+      margin: 2rem auto;
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">DEENORA</div>
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html">Products</a>
+      <a href="hottrends.html">Hot Trends</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html" class="cart-icon">🛒 Cart <span id="cart-count">0</span></a>
+    </nav>
+  </header>
+
+  <section class="cart-page">
+    <h2>Your Shopping Cart</h2>
+
+    <div id="full-cart-items" class="cart-grid"></div>
+
+    <!-- ✅ Total amount line -->
+    <p class="total-text">Total: ₹<span id="full-cart-total">0</span></p>
+
+    <!-- 📋 Copy Box -->
+    <div class="copy-cart-box">
+      <label for="cart-copy-text"><strong>📋 Ready to Copy Message |
+        Copy this below message and paste in our insta DM:</strong></label>
+      <textarea id="cart-copy-text" readonly></textarea>
+      <button class="copy-btn" onclick="copyCartMessage()">please Copy the above Message</button>
+    </div>
+
+    <button onclick="proceedToInstagramOrder()" class="fancy-cart-btn">Send Order via Instagram</button>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Deenora. All Rights Reserved.</p>
+  </footer>
+
+  <script src="int.js"></script>
+</body>
+</html>
